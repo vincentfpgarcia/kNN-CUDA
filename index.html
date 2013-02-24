@@ -31,29 +31,41 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2>Presentation</h2>
+        <h3>Presentation</h3>
 
-<p>The k-nearest neighbor (kNN) search is a problem found in many research and industrial domains such as 3-dimensional object rendering, content-based image retrieval, statistics (estimation of entropies and divergences), biology (gene classification), etc. In spite of some improvements in the last decades, the computation time required by the kNN search still remains the bottleneck of methods based on kNN, especially in high dimensionnal spaces.</p>
+<p>The <a href="http://en.wikipedia.org/wiki/K-nearest_neighbor_algorithm">k-nearest neighbor (kNN)</a> search is a problem found in many research and industrial domains such as 3-dimensional object rendering, content-based image retrieval, statistics (estimation of entropies and divergences), biology (gene classification), etc. In spite of some improvements in the last decades, the computation time required by the kNN search still remains the bottleneck of methods based on kNN, especially in high dimensionnal spaces.</p>
 
-<p>We propose in this website two GPGPU implementations of the brute-force (exhaustive) kNN search algorithm. These implementations, through the APIs NVIDIA CUDA and NVIDIA CUBLAS, paralellize the kNN search process into the computer graphic card. Thanks to the parallel structure of the GPU and the optimization of the APIs, the proposed implementation appears to be much faster, especially in high dimension and for large dataset, than the celebrated and highly optimized ANN C++ library.</p>
+<p>We propose in this website two GPGPU implementations of the brute-force (exhaustive) kNN search algorithm. These implementations, through the APIs NVIDIA CUDA and NVIDIA CUBLAS, paralellize the kNN search process into the computer graphic card. Thanks to the parallel structure of the GPU and the optimization of the APIs, the proposed implementation appears to be much faster, especially in high dimension and for large dataset, than the celebrated and highly optimized <a href="http://www.cs.umd.edu/%7Emount/ANN/">ANN C++ library</a>.</p>
 
-<h2>Authors</h2>
+<h3>Authors</h3>
 
 <ul>
 <li><a href="http://www.vincentgarcia.org/">Vincent Garcia</a></li>
 <li><a href="http://www.i3s.unice.fr/%7Edebreuve/">Eric Debreuve</a></li>
 <li><a href="http://www.i3s.unice.fr/%7Ebarlaud/">Michel Barlaud</a></li>
-</ul><h2>Source code</h2>
+</ul><h3>Source code information</h3>
 
-<p>The provided CUDA code is usable both for C, and Matlab program. Please read the README file to learn how to adapt code. We provide 4 implementations of the kNN search to fit to your needs:</p>
+<p>The provided CUDA code is usable for C, C++ and Matlab programming. A preprocessor constant in the file's header allows to activate or deactivate the Matlab wrapper. Please read the README file to learn how to adapt the code. We provide 2 implementations of the kNN search to fit to your needs:</p>
 
 <ul>
-<li>KNN CUDA — implementation CUDA of the k-nearest neighbor search.</li>
-<li>KNN CUBLAS — implementation CUBLAS of the k-nearest neighbor search. This version is usually faster than KNN CUDA and is based on matrix multiplication to compute the distances between points.</li>
-<li>With indexes — provides for each query point the distances to the k nearest neighbors and the indexes of these neighbors.</li>
-<li>Without indexes — provides for each query point only the distance to the k-th nearest neighbor. This version is faster than the version with indexes because first it uses less memory and second it does not spent time on processing indexes.
-References</li>
-</ul><h2>References</h2>
+<li>
+<strong>KNN CUDA</strong> is a CUDA implementation of the k-nearest neighbor search. The maximum number of points is 65535. There is no limit for the dimension except for the memory space it takes.</li>
+<li>
+<strong>KNN CUBLAS</strong> is a CUBLAS implementation of the k-nearest neighbor search. This version is usually faster than KNN CUDA and is based on matrix multiplication to compute the distances between points.  The maximum number of points is 65535 and the maximum dimension is 8192.</li>
+</ul><p>Most applications need to identify the kNN points by their index. Some other applications however are only interested in the distances to the k-th nearest neighbor (e.g. entropy estimation). We thus provide 2 specific implementations:</p>
+
+<ul>
+<li>
+<strong>With indexes</strong> provides for each query point the distances to the k nearest neighbors and the indexes of these neighbors.</li>
+<li>
+<strong>Without indexes</strong> provides for each query point only the distance to the k-th nearest neighbor. This version is faster than the version with indexes because first it uses less memory and second it does not spent time on processing indexes.</li>
+</ul><p>In total, we provide 4 specific implementations for solving the kNN search problem.</p>
+
+<h4>Important note</h4>
+
+<p>The provided code was written in the context of a Ph.D. thesis. The code was intended to provide a fast and generic solution to the challenging kNN search problem. However, authors are well aware that for a very specific application (e.g. small number of points, small dimension, only one query point, etc.) there is often a better implementation either in terms of computation time or memory footprint. It is known that a GPGPU implementation should be adapted to the problem and to the specifications of the GPU used. This code will help one to identify if the GPGPU solution is viable for the given problem. Following the terms of the license below, on is allowed and should adapt the code to his needs.</p>
+
+<h3>References</h3>
 
 <p>Following the terms of the license below, you need to acknowledge the use of this code. Do so by referencing the following article.</p>
 
