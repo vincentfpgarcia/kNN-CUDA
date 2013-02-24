@@ -31,32 +31,50 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+        <h2>Presentation</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>The k-nearest neighbor (kNN) search is a problem found in many research and industrial domains such as 3-dimensional object rendering, content-based image retrieval, statistics (estimation of entropies and divergences), biology (gene classification), etc. In spite of some improvements in the last decades, the computation time required by the kNN search still remains the bottleneck of methods based on kNN, especially in high dimensionnal spaces.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>We propose in this website two GPGPU implementations of the brute-force (exhaustive) kNN search algorithm. These implementations, through the APIs NVIDIA CUDA and NVIDIA CUBLAS, paralellize the kNN search process into the computer graphic card. Thanks to the parallel structure of the GPU and the optimization of the APIs, the proposed implementation appears to be much faster, especially in high dimension and for large dataset, than the celebrated and highly optimized ANN C++ library.</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>Authors</h2>
 
-<h3>Designer Templates</h3>
+<ul>
+<li><a href="http://www.vincentgarcia.org/">Vincent Garcia</a></li>
+<li><a href="http://www.i3s.unice.fr/%7Edebreuve/">Eric Debreuve</a></li>
+<li><a href="http://www.i3s.unice.fr/%7Ebarlaud/">Michel Barlaud</a></li>
+</ul><h2>Source code</h2>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>The provided CUDA code is usable both for C, and Matlab program. Please read the README file to learn how to adapt code. We provide 4 implementations of the kNN search to fit to your needs:</p>
 
-<h3>Rather Drive Stick?</h3>
+<ul>
+<li>KNN CUDA — implementation CUDA of the k-nearest neighbor search.</li>
+<li>KNN CUBLAS — implementation CUBLAS of the k-nearest neighbor search. This version is usually faster than KNN CUDA and is based on matrix multiplication to compute the distances between points.</li>
+<li>With indexes — provides for each query point the distances to the k nearest neighbors and the indexes of these neighbors.</li>
+<li>Without indexes — provides for each query point only the distance to the k-th nearest neighbor. This version is faster than the version with indexes because first it uses less memory and second it does not spent time on processing indexes.
+References</li>
+</ul><h2>References</h2>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Following the terms of the license below, you need to acknowledge the use of this code. Do so by referencing the following article.</p>
 
-<h3>Authors and Contributors</h3>
+<ul>
+<li>V. Garcia and E. Debreuve and F. Nielsen and M. Barlaud. k-nearest neighbor search: fast GPU-based implementations and application to high-dimensional feature matching. In Proceedings of the IEEE International Conference on Image Processing (ICIP), Hong Kong, China, September 2010. <a href="http://www.vincentgarcia.org/data/Garcia_2010_ICIP.pdf">View preprint</a>.</li>
+<li>V. Garcia and E. Debreuve and M. Barlaud. Fast k nearest neighbor search using GPU. In Proceedings of the CVPR Workshop on Computer Vision on GPU, Anchorage, Alaska, USA, June 2008. <a href="http://www.vincentgarcia.org/data/Garcia_2008_CVGPU.pdf">View preprint</a>.</li>
+<li>Vincent Garcia. Ph.D. Thesis: Suivi d'objets d'intérêt dans une séquence d'images : des points saillants aux mesures statistiques Université de Nice - Sophia Antipolis, Sophia Antipolis, France, December 2008.  <a href="http://www.vincentgarcia.org/data/Garcia_2008_PHD.pdf">View thesis</a>.</li>
+</ul><h2>License</h2>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>The provided code is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>. You are free:</p>
 
-<h3>Support or Contact</h3>
+<ul>
+<li>to Share — to copy, distribute and transmit the work,</li>
+<li>to Remix — to adapt the work,</li>
+</ul><p>Under the following conditions:</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<ul>
+<li>Attribution — You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work).</li>
+<li>Noncommercial — You may not use this work for commercial purposes.</li>
+<li>Share Alike — If you alter, transform, or build upon this work, you may distribute the resulting work only under the same or similar license to this one.</li>
+</ul>
       </section>
     </div>
 
