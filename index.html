@@ -45,7 +45,7 @@
 <li><a href="http://www.i3s.unice.fr/%7Ebarlaud/">Michel Barlaud</a></li>
 </ul><h3>Source code information</h3>
 
-<p>The provided CUDA code is usable for C, C++ and Matlab programming. A preprocessor constant in the file's header allows to activate or deactivate the Matlab wrapper. Please read the README file to learn how to adapt the code. We provide 2 implementations of the kNN search to fit to your needs:</p>
+<p>The provided CUDA code is usable for C, C++ and Matlab. A preprocessor constant in the file's header allows to activate or deactivate the Matlab wrapper. Please read the README file to learn how to adapt the code. We provide 2 implementations of the kNN search to fit to your needs:</p>
 
 <ul>
 <li>
@@ -56,18 +56,18 @@
 
 <ul>
 <li>
-<strong>With indexes</strong> provides for each query point the distances to the k nearest neighbors and the indexes of these neighbors.</li>
+<strong>Implementation with indexes</strong> provides for each query point the distances to the k nearest neighbors and the indexes of these neighbors.</li>
 <li>
-<strong>Without indexes</strong> provides for each query point only the distance to the k-th nearest neighbor. This version is faster than the version with indexes because first it uses less memory and second it does not spent time on processing indexes.</li>
+<strong>Implementation without indexes</strong> provides for each query point only the distance to the k-th nearest neighbor. This version is faster than the version with indexes because first it uses less memory and second it does not spent time on processing indexes.</li>
 </ul><p>In total, we provide 4 specific implementations for solving the kNN search problem.</p>
 
 <h4>Important note</h4>
 
-<p>The provided code was written in the context of a Ph.D. thesis. The code was intended to provide a fast and generic solution to the challenging kNN search problem. However, authors are well aware that for a very specific application (e.g. small number of points, small dimension, only one query point, etc.) there is often a better implementation either in terms of computation time or memory footprint. It is known that a GPGPU implementation should be adapted to the problem and to the specifications of the GPU used. This code will help one to identify if the GPGPU solution is viable for the given problem. Following the terms of the license below, on is allowed and should adapt the code to his needs.</p>
+<p>The provided code was written in the context of a Ph.D. thesis. The code was intended to provide a fast and generic solution to the challenging kNN search problem. However, authors are well aware that for a very specific application (e.g. small number of points, small dimension, only one query point, etc.) there is often a better implementation either in terms of computation time or memory footprint. It is known that a GPGPU implementation should be adapted to the problem and to the specifications of the GPU used. This code will help one to identify if the GPGPU solution is viable for the given problem. Following the terms of the license below, one is allowed and should adapt the code.</p>
 
 <h3>References</h3>
 
-<p>Following the terms of the license below, you need to acknowledge the use of this code. Do so by referencing the following article.</p>
+<p>Following the terms of the license below, you need to acknowledge the use of this code. Do so by referencing the following articles.</p>
 
 <ul>
 <li>V. Garcia and E. Debreuve and F. Nielsen and M. Barlaud. k-nearest neighbor search: fast GPU-based implementations and application to high-dimensional feature matching. In Proceedings of the IEEE International Conference on Image Processing (ICIP), Hong Kong, China, September 2010. <a href="http://www.vincentgarcia.org/data/Garcia_2010_ICIP.pdf">View preprint</a>.</li>
