@@ -28,7 +28,7 @@
 
 
 // If the code is used in Matlab, set MATLAB_CODE to 1. Otherwise, set MATLAB_CODE to 0.
-#define MATLAB_CODE 1  
+#define MATLAB_CODE 0
 
 
 // Includes
@@ -327,11 +327,11 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     size_t       ind_pitch_in_bytes;
     size_t       max_nb_query_traited;
     size_t       actual_nb_query_width;
-    unsigned int memory_total;
-    unsigned int memory_free;
+    size_t       memory_total;
+    size_t       memory_free;
     
 	
-	// Check if we can use texture memory for reference points
+	  // Check if we can use texture memory for reference points
     unsigned int use_texture = ( ref_width*size_of_float<=MAX_TEXTURE_WIDTH_IN_BYTES && height*size_of_float<=MAX_TEXTURE_HEIGHT_IN_BYTES );
     
     // CUDA Initialisation
@@ -346,7 +346,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     
     // Determine maximum number of query that can be treated
     max_nb_query_traited = ( memory_free * MAX_PART_OF_FREE_MEMORY_USED - size_of_float * ref_width*height ) / ( size_of_float * (height + ref_width) + size_of_int * k);
-    max_nb_query_traited = min( query_width, (max_nb_query_traited / 16) * 16 );
+    max_nb_query_traited = min( (size_t)query_width, (max_nb_query_traited / 16) * 16 );
     
     // Allocation of global memory for query points and for distances
     result = cudaMallocPitch( (void **) &query_dev, &query_pitch_in_bytes, max_nb_query_traited * size_of_float, height + ref_width);
@@ -366,7 +366,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     }
     ind_pitch = ind_pitch_in_bytes/size_of_int;
     
-	// Allocation of memory (global or texture) for reference points
+    // Allocation of memory (global or texture) for reference points
     if (use_texture){
 	
         // Allocation of texture memory
@@ -406,7 +406,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     for (int i=0; i<query_width; i+=max_nb_query_traited){
         
 		// Number of query points considered
-        actual_nb_query_width = min( max_nb_query_traited, query_width-i );
+        actual_nb_query_width = min( max_nb_query_traited, (size_t)(query_width-i));
         
         // Copy of part of query actually being treated
         cudaMemcpy2D(query_dev, query_pitch_in_bytes, &query_host[i], query_width*size_of_float, actual_nb_query_width*size_of_float, height, cudaMemcpyHostToDevice);
@@ -420,7 +420,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
         dim3 g_256x1(actual_nb_query_width/256, 1, 1);
         dim3 t_256x1(256, 1, 1);
         if (actual_nb_query_width%256 != 0) g_256x1.x += 1;
-		//
+    		//
         dim3 g_k_16x16(actual_nb_query_width/16, k/16, 1);
         dim3 t_k_16x16(16, 16, 1);
         if (actual_nb_query_width%16 != 0) g_k_16x16.x += 1;
@@ -480,7 +480,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int    query_width;
     int    query_height;
     float* dist;
-	int*   ind;
+  	int*   ind;
     int    k;
     
     // Reference points
@@ -488,12 +488,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     ref_width    = mxGetM(prhs[0]);
     ref_height   = mxGetN(prhs[0]);
 	
-	// Query points
+	  // Query points
     query        = (float *) mxGetData(prhs[1]);
     query_width  = mxGetM(prhs[1]);
     query_height = mxGetN(prhs[1]);
 	
-	// Number of neighbors to consider
+	  // Number of neighbors to consider
     k            = (int)mxGetScalar(prhs[2]);
     
     // Verification of the reference point and query point sizes

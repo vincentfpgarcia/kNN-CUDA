@@ -28,7 +28,7 @@
 
 
 // If the code is used in Matlab, set MATLAB_CODE to 1. Otherwise, set MATLAB_CODE to 0.
-#define MATLAB_CODE 1  
+#define MATLAB_CODE 0
 
 
 // Includes
@@ -262,8 +262,8 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     size_t       ind_pitch_in_bytes;
     size_t       max_nb_query_traited;
     size_t       actual_nb_query_width;
-    unsigned int memory_total;
-    unsigned int memory_free;
+    size_t       memory_total;
+    size_t       memory_free;
     
     // CUDA Initialisation
     cuInit(0);
@@ -277,7 +277,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     
     // Determine maximum number of query that can be treated
     max_nb_query_traited = ( memory_free * MAX_PART_OF_FREE_MEMORY_USED - size_of_float * ref_width*(height+1) ) / ( size_of_float * (height + ref_width + 1) + size_of_int * k);
-    max_nb_query_traited = min( query_width, (max_nb_query_traited / 16) * 16 );
+    max_nb_query_traited = min( (size_t)query_width, (max_nb_query_traited / 16) * 16 );
     
     // Allocation of global memory for query points and for distances
     result = cudaMallocPitch( (void **) &query_dev, &query_pitch_in_bytes, max_nb_query_traited * size_of_float, height + ref_width + 1);
@@ -286,7 +286,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
         return;
     }
     query_pitch = query_pitch_in_bytes/size_of_float;
-	query_norm  = query_dev  + height * query_pitch;
+    query_norm  = query_dev  + height * query_pitch;
     dist_dev    = query_norm + query_pitch;
     
     // Allocation of global memory for reference points and ||query||
@@ -301,7 +301,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
 	
     // Allocation of global memory for indexes	
     result = cudaMallocPitch( (void **) &ind_dev, &ind_pitch_in_bytes, max_nb_query_traited * size_of_int, k);
-	if (result){
+    if (result){
         printErrorMessage(result, max_nb_query_traited*size_of_int*k);
         cudaFree(ref_dev);
         cudaFree(query_dev);
@@ -322,7 +322,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
     for (int i=0; i<query_width; i+=max_nb_query_traited){
         
 		// Number of query points considered
-        actual_nb_query_width = min( max_nb_query_traited, query_width-i );
+        actual_nb_query_width = min( max_nb_query_traited, (size_t)(query_width-i) );
         
         // Copy of part of query actually being treated
         cudaMemcpy2D(query_dev, query_pitch_in_bytes, &query_host[i], query_width*size_of_float, actual_nb_query_width*size_of_float, height, cudaMemcpyHostToDevice);
@@ -350,7 +350,7 @@ void knn(float* ref_host, int ref_width, float* query_host, int query_width, int
         cuAddQNormAndSqrt<<<query_grid_2,query_thread_2>>>( dist_dev, actual_nb_query_width, query_pitch, query_norm, k);
         
         // Memory copy of output from device to host
-		cudaMemcpy2D(&dist_host[i], query_width*size_of_float, dist_dev, query_pitch_in_bytes, actual_nb_query_width*size_of_float, k, cudaMemcpyDeviceToHost);
+        cudaMemcpy2D(&dist_host[i], query_width*size_of_float, dist_dev, query_pitch_in_bytes, actual_nb_query_width*size_of_float, k, cudaMemcpyDeviceToHost);
         cudaMemcpy2D(&ind_host[i],  query_width*size_of_int,   ind_dev,  ind_pitch_in_bytes,   actual_nb_query_width*size_of_int,   k, cudaMemcpyDeviceToHost);
     }
     
@@ -426,17 +426,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
   */
 int main(void){
 	
-    // Variables and parameters
-    float* ref;                 // Pointer to reference point array
-    float* query;               // Pointer to query point array
-    float* dist;                // Pointer to distance array
-	int*   ind;                 // Pointer to index array
-	int    ref_nb     = 4096;   // Reference point number, max=65535
-	int    query_nb   = 4096;   // Query point number,     max=65535
-	int    dim        = 32;     // Dimension of points,    max=8192
-	int    k          = 20;     // Nearest neighbors to consider
-	int    iterations = 100;
-	int    i;
+  // Variables and parameters
+  float* ref;                 // Pointer to reference point array
+  float* query;               // Pointer to query point array
+  float* dist;                // Pointer to distance array
+  int*   ind;                 // Pointer to index array
+  int    ref_nb     = 4096;   // Reference point number, max=65535
+  int    query_nb   = 4096;   // Query point number,     max=65535
+  int    dim        = 32;     // Dimension of points,    max=8192
+  int    k          = 20;     // Nearest neighbors to consider
+  int    iterations = 100;
+  int    i;
 	
 	// Memory allocation
 	ref    = (float *) malloc(ref_nb   * dim * sizeof(float));
