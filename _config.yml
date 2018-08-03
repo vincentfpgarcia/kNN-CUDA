@@ -1,0 +1,8 @@
+title: kNN CUDA
+description: Fast k nearest neighbor search using GPU
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
